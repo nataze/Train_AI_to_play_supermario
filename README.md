@@ -1,5 +1,8 @@
 # Super Mario Bros RL Training
 
+![super_mario_training](https://github.com/user-attachments/assets/27a9dde0-5f4f-4aa9-a228-916e3ed54621)
+
+
 This project trains an asynchronous A3C agent to play **Super Mario Bros** and exposes the gameplay through a Streamlit experience that can run locally or on Streamlit Community Cloud.
 
 ## Getting Started
