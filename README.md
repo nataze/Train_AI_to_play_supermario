@@ -1,4 +1,4 @@
-# Super Mario Bros RL Training
+# [Super Mario Bros RL Training](https://supermario-training.streamlit.app/)
 
 ![super_mario_training](https://github.com/user-attachments/assets/27a9dde0-5f4f-4aa9-a228-916e3ed54621)
 
@@ -52,7 +52,7 @@ The Streamlit app offers three visualization modes:
 
 ## 🌐 Live Demo
 
-**Try the app online:** [YOUR_APP_URL_HERE]
+**Try the app online:** https://supermario-training.streamlit.app/
 
 The web app offers three interactive modes to explore reinforcement learning:
 
