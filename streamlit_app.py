@@ -424,10 +424,9 @@ st.markdown(
             realities of the Mushroom Kingdom in parallel and share their discoveries.
         </p>
         <p>
-            Choose from three visualization modes: <strong>Live Training Monitor</strong> trains the network from scratch 
+            Choose from two visualization modes: <strong>Live Training Monitor</strong> trains the network from scratch 
             and updates observer windows every few seconds so you watch Mario learn in real-time. 
-            <strong>Multiple Training Windows</strong> shows 8-10 animated gameplay clips using a pre-trained model.
-            <strong>Single Video Playback</strong> offers traditional frame snapshots and MP4 playback.
+            <strong>View Training Windows</strong> shows 8-10 animated gameplay clips using a pre-trained model.
         </p>
     </div>
     """,
@@ -441,8 +440,8 @@ action_type = st.sidebar.selectbox("Action Type", ["complex", "simple", "right"]
 
 display_mode = st.sidebar.radio(
     "Display Mode",
-    ["Live Training Monitor", "Multiple Training Windows", "Single Video Playback"],
-    help="Live Training: Watch the AI learn in real-time | Training Windows: Pre-recorded simulations | Video Playback: Single MP4"
+    ["Live Training Monitor", "View Training Windows"],
+    help="Live Training: Watch the AI learn in real-time | Training Windows: Pre-recorded simulations"
 )
 
 if display_mode == "Live Training Monitor":
@@ -479,7 +478,7 @@ if display_mode == "Live Training Monitor":
         step=10,
         help="Number of frames to capture for each window update"
     )
-elif display_mode == "Multiple Training Windows":
+elif display_mode == "View Training Windows":
     num_windows = st.sidebar.slider(
         "Number of windows",
         min_value=4,
@@ -504,18 +503,6 @@ elif display_mode == "Multiple Training Windows":
         step=5,
         help="Frames per second for the animated windows"
     )
-else:
-    max_steps = st.sidebar.slider("Max rollout steps", min_value=100, max_value=600, value=250, step=50)
-    stuck_tolerance = st.sidebar.slider(
-        "Repeat-action abort (steps)",
-        min_value=40,
-        max_value=240,
-        value=160,
-        step=20,
-        help="Stops the rollout if the policy repeats the same action for this many steps. "
-        "Increase it for longer videos.",
-    )
-
 # Initialize session state for live training
 if 'training_active' not in st.session_state:
     st.session_state.training_active = False
@@ -632,13 +619,13 @@ else:
     else:
         model, env = model_env
 
-        if display_mode == "Multiple Training Windows":
+        if display_mode == "View Training Windows":
             button_label = f"🚀 Launch {num_windows} Training Windows"
         else:
             button_label = "🚀 Generate Training Screens"
 
         if st.button(button_label, type="primary"):
-            if display_mode == "Multiple Training Windows":
+            if display_mode == "View Training Windows":
                 with st.spinner(f"Generating {num_windows} parallel simulations..."):
                     rollouts = generate_multiple_rollouts(
                         model, world, stage, action_type, 
@@ -686,35 +673,6 @@ else:
                         f"{total_frames} total frames • "
                         f"~{duration_seconds:.1f}s per window @ {fps} FPS"
                     )
-
-            else:
-                # Original single video mode
-                with st.spinner("Rolling out the agent..."):
-                    frames = generate_frames(
-                        model, env, max_steps=max_steps, stuck_tolerance=stuck_tolerance
-                    )
-
-                if not frames:
-                    st.error("Failed to generate frames. Please ensure the environment renders correctly.")
-                else:
-                    st.success(f"Captured {len(frames)} frames!")
-
-                    st.markdown("### 📺 Training Monitor Wall")
-                    cols = st.columns(2)
-                    sample_indexes = np.linspace(0, len(frames) - 1, num=min(4, len(frames)), dtype=int)
-
-                    for idx, frame_idx in enumerate(sample_indexes):
-                        frame = frames[frame_idx]
-                        image = Image.fromarray(frame.astype(np.uint8))
-                        with cols[idx % 2]:
-                            st.image(image, caption=f"View {idx + 1} — Step {frame_idx}", use_container_width=True)
-
-                    st.markdown("### 🎥 Full Playback")
-                    video_bytes = frames_to_video_bytes(frames)
-                    if video_bytes:
-                        st.video(video_bytes)
-                    else:
-                        st.info("Video export unavailable, but individual frames are shown above.")
 
 st.markdown("---")
 st.caption("Built with PyTorch, Gym Super Mario Bros, and Streamlit • A3C Agent Showcase")
