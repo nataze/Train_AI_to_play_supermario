@@ -47,38 +47,38 @@ The Streamlit app offers three visualization modes:
 - Great for visualizing policy behavior
 
 
-### Deploy on Streamlit Cloud
+## 🌐 Live Demo
 
-**Quick Deploy:**
+**Try the app online:** [YOUR_APP_URL_HERE]
 
-1. **Initialize Git & Push to GitHub:**
-   ```bash
-   git init
-   git add .
-   git commit -m "Initial commit: A3C Super Mario Bros RL Training"
-   git branch -M main
-   git remote add origin https://github.com/YOUR_USERNAME/RL_Super_Mario.git
-   git push -u origin main
-   ```
+The web app offers three interactive modes to explore reinforcement learning:
 
-2. **Deploy on Streamlit Cloud:**
-   - Go to [share.streamlit.io](https://share.streamlit.io)
-   - Click "New app"
-   - Select your GitHub repository
-   - Set main file path: `streamlit_app.py`
-   - Click "Deploy"
+### 🔴 Live Training Monitor
+**Watch AI learn from scratch in real-time:**
+1. Select "Live Training Monitor" from the sidebar
+2. Configure settings (or use defaults: 4 training workers, 6 observer windows)
+3. Click "▶️ Start Training"
+4. Watch the observer windows update every 5 seconds as the neural network learns
+5. See metrics improve: loss decreases, reward increases
+6. Mario's behavior evolves from random to purposeful movement
+7. Click "⏹️ Stop Training" to save the trained model
 
-3. **Required Files (already included):**
-   - ✅ `.streamlit/config.toml` - Streamlit configuration
-   - ✅ `packages.txt` - System dependencies (libgl1-mesa-glx, libglib2.0-0)
-   - ✅ `requirements.txt` - Python packages
-   - ✅ `trained_models/A3CSuperMarioBros_1_1` - Pre-trained model
+**What you'll see:** Initially, Mario moves randomly in all directions. After a few minutes, he starts moving right consistently. After 10-15 minutes, he learns to jump over obstacles!
 
-**Notes:**
-- The app will work in all three modes (Live Training, Multiple Windows, Single Video)
-- Live Training mode works great on Streamlit Cloud and lets visitors train from scratch
-- System packages in `packages.txt` are required for OpenCV and Gym rendering
-- Environment variables are automatically set for headless rendering
+### 🎮 Multiple Training Windows (Pre-trained Model)
+**Compare different strategies side-by-side:**
+1. Select "Multiple Training Windows" from the sidebar
+2. Choose number of windows (4-12, default: 8)
+3. Click "🚀 Launch N Training Windows"
+4. Watch 8 animated gameplay clips, each exploring differently
+5. Each window uses stochastic sampling with unique random seeds
+
+### 📹 Single Video Playback
+**Traditional video playback experience:**
+1. Select "Single Video Playback" from the sidebar
+2. Adjust max rollout steps
+3. Click "🚀 Generate Training Screens"
+4. View frame snapshots and full MP4 playback
 
 ## Project Structure
 
