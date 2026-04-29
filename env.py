@@ -61,10 +61,12 @@ class CustomReward(Wrapper):
       self.monitor = None
 
   def step(self, action):
-    state, reward, terminated, truncated, info = self.env.step(action)
-    done = False
-    if terminated or truncated:
-      done = True
+    step_result = self.env.step(action)
+    if len(step_result) == 5:
+      state, reward, terminated, truncated, info = step_result
+      done = terminated or truncated
+    else:
+      state, reward, done, info = step_result
     if self.monitor:
       self.monitor.record(state)
     state = process_frame(state)
@@ -89,7 +91,12 @@ class CustomReward(Wrapper):
   def reset(self):
     self.curr_score = 0
     self.curr_x_pos = 0
-    return process_frame(self.env.reset())
+    reset_result = self.env.reset()
+    if isinstance(reset_result, tuple):
+      state = reset_result[0]
+    else:
+      state = reset_result
+    return process_frame(state)
   
 
 class CustomSkipFrame(Wrapper):
@@ -110,7 +117,7 @@ class CustomSkipFrame(Wrapper):
       else:
         states.append(state)
     states = np.concatenate(states, 0)[None, :, :, :]
-    return states.astype(np.float32), reward, done, info
+    return states.astype(np.float32), total_reward, done, info
   
   def reset(self):
     state = self.env.reset()
